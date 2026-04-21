@@ -1,80 +1,86 @@
-# Steampipe Plugin — IPGeolocation.io
+# Steampipe Plugin for IPGeolocation.io
 
-Query IP geolocation, network, security, timezone, company, abuse, and hostname data using SQL via the [IPGeolocation.io](https://ipgeolocation.io) v3 API.
+Use SQL to query IP geolocation, threat intelligence, ASN details, and abuse contacts from [IPGeolocation.io](https://ipgeolocation.io).
+
+```sql
+select
+  ip,
+  country_name,
+  city,
+  isp,
+  timezone_name
+from
+  ipgeolocation_ip
+where
+  ip = '8.8.8.8';
+```
 
 ## Quick Start
 
-### 1. Install the plugin
+Install the plugin:
 
 ```sh
-steampipe plugin install ipgeolocation
+steampipe plugin install ipgeolocation/ipgeolocation
 ```
 
-### 2. Configure credentials
-
-```sh
-cp config/ipgeolocation.spc ~/.steampipe/config/ipgeolocation.spc
-# edit the file and set your api_key
-```
-
-### 3. Query away
-
-```sql
--- Where is 8.8.8.8?
-select ip, country_name, city, isp
-from ipgeolocation_ip
-where ip = '8.8.8.8';
-
--- Is it a VPN/proxy/Tor?
-select ip, is_vpn, is_proxy, is_tor, threat_score
-from ipgeolocation_ip
-where ip = '185.220.101.45';
-```
-
-## Requirements
-
-| Requirement | Version |
-|---|---|
-| Steampipe | ≥ 0.20 |
-| Steampipe Plugin SDK | v5 |
-| Go | ≥ 1.21 |
-
-## Building from Source
-
-```sh
-git clone https://github.com/turbot/steampipe-plugin-ipgeolocation
-cd steampipe-plugin-ipgeolocation
-make
-```
-
-## Configuration Reference
+Configure your API key in `~/.steampipe/config/ipgeolocation.spc`:
 
 ```hcl
 connection "ipgeolocation" {
-  plugin  = "ipgeolocation"
+  plugin = "ipgeolocation/ipgeolocation"
 
-  # Required for most modules. Free tier covers basic location data.
-  # Sign up at https://app.ipgeolocation.io/
-  api_key = "YOUR_API_KEY_HERE"
+  # Get your free API key at https://app.ipgeolocation.io/dashboard
+  # Can also be set with the IPGEOLOCATION_API_KEY environment variable.
+  # api_key = "a1b2c3d4e5f6..."
 }
 ```
 
-## Tables
+Run a query:
 
-| Table | Description |
-|---|---|
-| [ipgeolocation_ip](docs/tables/ipgeolocation_ip.md) | Geolocation data for a given IP address or domain |
+```sh
+steampipe query "select ip, country_name, city from ipgeolocation_ip where ip = '8.8.8.8'"
+```
 
-## API Plan Notes
+## Developing
 
-| Module | Free | Paid |
-|---|---|---|
-| Location (country, city, lat/lon) | ✅ | ✅ |
-| Timezone | ✅ | ✅ |
-| Network / ASN | ✅ | ✅ |
-| Hostname | ❌ | ✅ |
-| Security (VPN, proxy, threat score) | ❌ | ✅ |
-| Company | ❌ | ✅ |
-| Abuse contact | ❌ | ✅ |
+Prerequisites:
 
-Free-plan columns will return `null` when the field is not available on your subscription tier.
+- [Steampipe](https://steampipe.io/downloads) ≥ 0.20
+- [Go](https://golang.org/dl/) 1.26+
+
+Clone the repo, build, and install:
+
+```sh
+git clone https://github.com/IPGeolocation/steampipe-plugin-ipgeolocation
+cd steampipe-plugin-ipgeolocation
+make setup
+```
+
+`make setup` runs `go mod tidy`, builds the plugin binary, and installs both the binary and the sample config file.
+
+To rebuild after making changes:
+
+```sh
+make install
+```
+
+Run tests:
+
+```sh
+make test
+```
+
+## Documentation
+
+Full table documentation is available on [Steampipe Hub](https://hub.steampipe.io/plugins/ipgeolocation/ipgeolocation/tables) and in the [`docs/`](docs/tables) directory.
+
+| Table | Endpoint | Description | Credits |
+|---|---|---|---|
+| [ipgeolocation_ip](docs/tables/ipgeolocation_ip.md) | `/v3/ipgeo` | Geolocation, network, timezone, security, company, abuse, hostname | 1–4 |
+| [ipgeolocation_security](docs/tables/ipgeolocation_security.md) | `/v3/security` | VPN, proxy, Tor, relay, bot, spam, and threat score | 2 |
+| [ipgeolocation_abuse](docs/tables/ipgeolocation_abuse.md) | `/v3/abuse` | Abuse contact emails, phone numbers, org, and CIDR route | 1 |
+| [ipgeolocation_asn](docs/tables/ipgeolocation_asn.md) | `/v3/asn` | ASN details, routes, peers, upstreams, downstreams, WHOIS | 1 |
+
+## License
+
+This plugin is licensed under the [Apache 2.0 License](LICENSE).
