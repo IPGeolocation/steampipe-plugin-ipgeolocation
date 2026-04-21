@@ -2,7 +2,7 @@
 organization: ipgeolocation
 category: ["saas", "internet", "security"]
 icon_url: "/images/plugins/ipgeolocation/ipgeolocation.svg"
-brand_color: "#FF6B35"
+brand_color: "#6c63ff"
 display_name: "IPGeolocation.io"
 short_name: "ipgeolocation"
 description: "Use Steampipe to query IP geolocation, threat intelligence, ASN details, and abuse contacts from IPGeolocation.io."
