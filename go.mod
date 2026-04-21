@@ -1,6 +1,6 @@
 module github.com/IPGeolocation/steampipe-plugin-ipgeolocation
 
-go 1.26.0
+go 1.24
 
 require github.com/turbot/steampipe-plugin-sdk/v5 v5.10.4
 
