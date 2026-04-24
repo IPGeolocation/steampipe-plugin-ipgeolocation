@@ -7,7 +7,6 @@ select
   ip,
   country_name,
   city,
-  isp,
   timezone_name
 from
   ipgeolocation_ip
@@ -46,7 +45,7 @@ steampipe query "select ip, country_name, city from ipgeolocation_ip where ip = 
 Prerequisites:
 
 - [Steampipe](https://steampipe.io/downloads) ≥ 0.20
-- [Go](https://golang.org/dl/) 1.26+
+- [Go](https://golang.org/dl/) 1.24+
 
 Clone the repo, build, and install:
 

@@ -39,33 +39,6 @@ where
   ip = '8.8.8.8';
 ```
 
-### Get role and handle information
-
-```sql
-select
-  ip,
-  handle,
-  role,
-  kind,
-  address
-from
-  ipgeolocation_abuse
-where
-  ip = '91.128.103.196';
-```
-
-### Inspect the full raw response
-
-```sql
-select
-  ip,
-  raw
-from
-  ipgeolocation_abuse
-where
-  ip = '1.1.1.1';
-```
-
 ---
 
 ## Column Reference
@@ -75,12 +48,9 @@ where
 | ip | text | Queried IP address |
 | route | text | CIDR block covering the IP |
 | country | text | ISO alpha-2 country of registrant |
-| handle | text | Registry NIC handle |
 | name | text | Abuse contact or IRT name |
 | organization | text | Responsible organisation |
-| role | text | Contact role (e.g. "abuse") |
 | kind | text | Contact kind (e.g. "group") |
 | address | text | Postal address |
 | emails | jsonb | Array of abuse email addresses |
 | phone_numbers | jsonb | Array of abuse phone numbers |
-| raw | jsonb | Full raw API response |

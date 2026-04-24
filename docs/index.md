@@ -24,7 +24,6 @@ select
   ip,
   country_name,
   city,
-  isp,
   timezone_name
 from
   ipgeolocation_ip
@@ -47,28 +46,22 @@ where
 - **[Table: ipgeolocation_abuse](https://hub.steampipe.io/plugins/ipgeolocation/ipgeolocation/tables/ipgeolocation_abuse)** — abuse contact emails, phone numbers, and responsible organisation
 - **[Table: ipgeolocation_asn](https://hub.steampipe.io/plugins/ipgeolocation/ipgeolocation/tables/ipgeolocation_asn)** — ASN details, announced routes, peers, upstreams, downstreams, and WHOIS
 
-## Get Started
-
-### Install the plugin
+## Installation
 
 ```sh
 steampipe plugin install ipgeolocation/ipgeolocation
 ```
 
-### Configure credentials
+## Credentials
 
-```sh
-steampipe plugin configure ipgeolocation
-```
-
-Or create `~/.steampipe/config/ipgeolocation.spc` manually:
+Edit `~/.steampipe/config/ipgeolocation.spc`
 
 ```hcl
 connection "ipgeolocation" {
   plugin = "ipgeolocation/ipgeolocation"
 
   # Get your API key at https://app.ipgeolocation.io/dashboard
-  # Free tier works without a key for basic geolocation.
+  # Can also be set with the IPGEOLOCATION_API_KEY environment variable
   # api_key = "YOUR_API_KEY_HERE"
 }
 ```
@@ -79,11 +72,18 @@ You can also set the key via environment variable:
 export IPGEOLOCATION_API_KEY="YOUR_API_KEY_HERE"
 ```
 
-### Run your first query
+## Multiple Connections
 
-```sh
-steampipe query "select ip, country_name, city from ipgeolocation_ip where ip = '1.1.1.1'"
+You can create multiple connections and combine them using an [aggregator connection](https://steampipe.io/docs/managing/connections#using-aggregators):
+
+```hcl
+connection "ipgeolocation_all" {
+  plugin      = "ipgeolocation/ipgeolocation"
+  type        = "aggregator"
+  connections = ["ipgeolocation_*"]
+}
 ```
+
 
 ## Example Queries
 

@@ -65,9 +65,7 @@ where
 select
   ip,
   is_cloud_provider,
-  cloud_provider_name,
-  asn,
-  isp
+  cloud_provider_name
 from
   ipgeolocation_security
 where
@@ -99,26 +97,12 @@ select
   is_proxy,
   is_tor,
   is_residential_proxy,
-  is_known_attacker,
-  country_name,
-  isp
+  is_known_attacker
 from
   ipgeolocation_security
 where
   ip = '91.108.56.1'
   and threat_score > 50;
-```
-
-### Inspect full raw response
-
-```sql
-select
-  ip,
-  raw
-from
-  ipgeolocation_security
-where
-  ip = '8.8.8.8';
 ```
 
 ---
@@ -147,4 +131,3 @@ where
 | is_known_attacker | bool | Flagged for attack activity |
 | is_bot | bool | Bot activity detected |
 | is_spam | bool | On spam block lists |
-| raw | jsonb | Full raw API response |

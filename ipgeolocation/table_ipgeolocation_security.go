@@ -8,8 +8,7 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-// tableIPSecurity returns the Steampipe table definition for ipgeolocation_security.
-func tableIPSecurity(ctx context.Context) *plugin.Table {
+func tableIpgeolocationSecurity(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name: "ipgeolocation_security",
 		Description: "IP threat intelligence using the IPGeolocation.io /v3/security endpoint. " +
@@ -17,8 +16,13 @@ func tableIPSecurity(ctx context.Context) *plugin.Table {
 			"with confidence scores, provider names, and last-seen dates. Requires a paid plan. " +
 			"Each query costs 2 API credits.",
 		List: &plugin.ListConfig{
-			KeyColumns: plugin.OptionalColumns([]string{"ip"}),
-			Hydrate:    listIPSecurity,
+			KeyColumns: []*plugin.KeyColumn{
+				{
+					Name:    "ip",
+					Require: plugin.Required,
+				},
+			},
+			Hydrate: listIPSecurity,
 		},
 		Columns: ipSecurityColumns(),
 	}
@@ -161,14 +165,6 @@ func ipSecurityColumns() []*plugin.Column {
 			Type:        proto.ColumnType_BOOL,
 			Description: "True if the IP appears on spam block lists.",
 			Transform:   transform.FromField("security.is_spam"),
-		},
-
-		// ── Raw JSON ────────────────────────────────────────────────────────
-		{
-			Name:        "raw",
-			Type:        proto.ColumnType_JSON,
-			Description: "Full raw JSON response from the /v3/security API endpoint.",
-			Transform:   transform.FromValue(),
 		},
 	}
 }
