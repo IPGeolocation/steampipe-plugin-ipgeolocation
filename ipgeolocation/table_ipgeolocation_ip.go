@@ -8,16 +8,18 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-// tableIPGeolocation returns the Steampipe table definition for ipgeolocation_ip.
-func tableIPGeolocation(ctx context.Context) *plugin.Table {
+func tableIpgeolocationIp(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "ipgeolocation_ip",
-		Description: "IP geolocation lookup using the IPGeolocation.io v3 API. Query a single IP address or domain to retrieve location, network, security, timezone, company, abuse, and hostname data.",
+		Description: "IP geolocation lookup using the IPGeolocation.io v3 API. Query a single IP address or domain (paid only)  to retrieve location, network, security, timezone, company, abuse, and hostname data.",
 		List: &plugin.ListConfig{
-			// Require the caller to pass at least one IP via the qual.
-			// The table will also accept zero quals and return the caller's own IP.
-			KeyColumns: plugin.OptionalColumns([]string{"ip"}),
-			Hydrate:    listIPGeolocation,
+			KeyColumns: []*plugin.KeyColumn{
+				{
+					Name:    "ip",
+					Require: plugin.Required,
+				},
+			},
+			Hydrate: listIPGeolocation,
 		},
 		Columns: ipGeolocationColumns(),
 	}
@@ -138,6 +140,13 @@ func ipGeolocationColumns() []*plugin.Column {
 			Transform:   transform.FromField("location.accuracy_radius"),
 		},
 		{
+
+			Name:        "confidence",
+			Type:        proto.ColumnType_STRING,
+			Description: "Confidence level (low, medium, high).",
+			Transform:   transform.FromField("location.confidence"),
+		},
+		{
 			Name:        "is_eu",
 			Type:        proto.ColumnType_BOOL,
 			Description: "True if the IP is in a European Union member state.",
@@ -173,19 +182,13 @@ func ipGeolocationColumns() []*plugin.Column {
 			Name:        "asn",
 			Type:        proto.ColumnType_STRING,
 			Description: "Autonomous System Number.",
-			Transform:   transform.FromField("network.asn"),
-		},
-		{
-			Name:        "isp",
-			Type:        proto.ColumnType_STRING,
-			Description: "Internet Service Provider name.",
-			Transform:   transform.FromField("network.isp"),
+			Transform:   transform.FromField("asn.as_number"),
 		},
 		{
 			Name:        "organization",
 			Type:        proto.ColumnType_STRING,
 			Description: "Organization registered to the IP.",
-			Transform:   transform.FromField("network.organization"),
+			Transform:   transform.FromField("asn.organization"),
 		},
 		{
 			Name:        "connection_type",
@@ -337,15 +340,7 @@ func ipGeolocationColumns() []*plugin.Column {
 			Name:        "abuse_network",
 			Type:        proto.ColumnType_STRING,
 			Description: "CIDR block of the network in the abuse record (paid plan).",
-			Transform:   transform.FromField("abuse.network"),
-		},
-
-		// ── Raw JSON ────────────────────────────────────────────────────────
-		{
-			Name:        "raw",
-			Type:        proto.ColumnType_JSON,
-			Description: "Full raw JSON response from the API.",
-			Transform:   transform.FromValue(),
+			Transform:   transform.FromField("abuse.route"),
 		},
 	}
 }

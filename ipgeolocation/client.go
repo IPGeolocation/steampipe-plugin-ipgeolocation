@@ -45,6 +45,7 @@ func newClient(ctx context.Context, d *plugin.QueryData) (*Client, error) {
 }
 
 // GetSecurity calls GET /v3/security and returns raw JSON decoded into a map.
+// Requires a paid plan API key.
 // Costs 2 credits per request. Requires a paid plan API key.
 func (c *Client) GetSecurity(ctx context.Context, ip string) (map[string]interface{}, error) {
 	params := url.Values{}
@@ -73,6 +74,7 @@ func (c *Client) GetAbuse(ctx context.Context, ip string) (map[string]interface{
 }
 
 // GetASN calls GET /v3/asn and returns raw JSON decoded into a map.
+// Requires a paid plan API key.
 // Accepts either an IP address (ip param) or an ASN number (asn param).
 // Costs 1 credit per request.
 func (c *Client) GetASN(ctx context.Context, ip, asn string) (map[string]interface{}, error) {
@@ -118,7 +120,6 @@ func (c *Client) doGet(ctx context.Context, endpoint string) (map[string]interfa
 }
 
 // GetIPGeo calls GET /v3/ipgeo and returns raw JSON decoded into a map.
-// ip may be empty to geolocate the caller's IP.
 func (c *Client) GetIPGeo(ctx context.Context, ip string) (map[string]interface{}, error) {
 	params := url.Values{}
 	if c.apiKey != "" {

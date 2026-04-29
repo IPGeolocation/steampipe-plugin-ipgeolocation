@@ -1,6 +1,6 @@
 # Table: ipgeolocation_ip
 
-Look up geolocation, network, timezone, security, company, abuse, and hostname data for any IPv4, IPv6, or domain using the [IPGeolocation.io](https://ipgeolocation.io) v3 API.
+Look up geolocation, network, timezone, security, company, abuse, and hostname data for any IPv4, IPv6, or domain (paid only) using the [IPGeolocation.io](https://ipgeolocation.io) v3 API.
 
 ## Configuration
 
@@ -8,12 +8,14 @@ Configure your API key in `~/.steampipe/config/ipgeolocation.spc`:
 
 ```hcl
 connection "ipgeolocation" {
-  plugin  = "ipgeolocation"
+  plugin  = "ipgeolocation/ipgeolocation"
+
+  # API key from https://app.ipgeolocation.io/dashboard (Required)
   api_key = "YOUR_API_KEY_HERE"
 }
 ```
 
-A free-tier key from [ipgeolocation.io](https://app.ipgeolocation.io/dashboard) covers basic location data. Paid plans unlock security, hostname, company, and abuse modules.
+A free-tier key from [ipgeolocation.io](https://app.ipgeolocation.io/dashboard) covers basic location data. Paid plans unlock security, hostname, company, abuse data.
 
 ---
 
@@ -48,7 +50,7 @@ from
   ipgeolocation_ip;
 ```
 
-### Check security signals for a suspicious IP
+### Check security signals for a suspicious IP (paid plan)
 
 ```sql
 select
@@ -71,7 +73,6 @@ where
 select
   ip,
   asn,
-  isp,
   organization,
   connection_type
 from
@@ -111,18 +112,6 @@ where
   ip = '104.21.0.1';
 ```
 
-### Inspect the full raw JSON response
-
-```sql
-select
-  ip,
-  raw
-from
-  ipgeolocation_ip
-where
-  ip = '8.8.4.4';
-```
-
 ---
 
 ## Column Reference
@@ -142,19 +131,19 @@ where
 | state_code | text | ISO 3166-2 state code |
 | district | text | District / county |
 | city | text | City |
-| locality | text | Locality |
+| locality | text | Locality (Paid) |
 | zipcode | text | ZIP / postal code |
 | latitude | text | Latitude |
 | longitude | text | Longitude |
-| accuracy_radius | text | Accuracy radius (km) |
+| accuracy_radius | text | Accuracy radius (km) (Paid) |
+| confidence | text | Confidence level (low, medium, high) (Paid) |
 | is_eu | bool | True if EU member state |
 | country_flag | text | Country flag image URL |
 | country_emoji | text | Country flag emoji |
 | geoname_id | text | GeoNames ID |
-| dma_code | text | DMA code (US only) |
+| dma_code | text | DMA code (US only) (Paid) |
 | asn | text | Autonomous System Number |
-| isp | text | ISP name |
-| organization | text | Network organization |
+| organization | text | ASN organization |
 | connection_type | text | Connection type |
 | timezone_name | text | IANA timezone name |
 | timezone_offset | bigint | UTC offset (seconds) |
@@ -179,4 +168,3 @@ where
 | abuse_address | text | Abuse postal address (paid) |
 | abuse_phone | text | Abuse phone (paid) |
 | abuse_network | text | Abuse CIDR block (paid) |
-| raw | jsonb | Full raw API response |
