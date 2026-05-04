@@ -8,8 +8,7 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-// tableIPAbuse returns the Steampipe table definition for ipgeolocation_abuse.
-func tableIPAbuse(ctx context.Context) *plugin.Table {
+func tableIpgeolocationAbuse(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name: "ipgeolocation_abuse",
 		Description: "Abuse contact lookup using the IPGeolocation.io /v3/abuse endpoint. " +
@@ -17,8 +16,13 @@ func tableIPAbuse(ctx context.Context) *plugin.Table {
 			"postal address, CIDR route, and registered country for any IPv4 or IPv6 address. " +
 			"Requires a paid plan. Each query costs 1 API credit.",
 		List: &plugin.ListConfig{
-			KeyColumns: plugin.OptionalColumns([]string{"ip"}),
-			Hydrate:    listIPAbuse,
+			KeyColumns: []*plugin.KeyColumn{
+				{
+					Name:    "ip",
+					Require: plugin.Required,
+				},
+			},
+			Hydrate: listIPAbuse,
 		},
 		Columns: ipAbuseColumns(),
 	}
@@ -82,14 +86,6 @@ func ipAbuseColumns() []*plugin.Column {
 			Type:        proto.ColumnType_JSON,
 			Description: "Array of abuse contact phone numbers.",
 			Transform:   transform.FromField("abuse.phone_numbers"),
-		},
-
-		// ── Raw JSON ────────────────────────────────────────────────────────
-		{
-			Name:        "raw",
-			Type:        proto.ColumnType_JSON,
-			Description: "Full raw JSON response from the /v3/abuse API endpoint.",
-			Transform:   transform.FromValue(),
 		},
 	}
 }

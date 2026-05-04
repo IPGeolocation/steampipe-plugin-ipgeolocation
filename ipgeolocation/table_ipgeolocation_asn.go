@@ -2,6 +2,7 @@ package ipgeolocation
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
@@ -9,8 +10,7 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-// tableASN returns the Steampipe table definition for ipgeolocation_asn.
-func tableASN(ctx context.Context) *plugin.Table {
+func tableIpgeolocationAsn(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name: "ipgeolocation_asn",
 		Description: "ASN lookup using the IPGeolocation.io /v3/asn endpoint. " +
@@ -18,9 +18,6 @@ func tableASN(ctx context.Context) *plugin.Table {
 			"With no filter the caller's own public IP ASN is returned. " +
 			"Each query costs 1 API credit.",
 		List: &plugin.ListConfig{
-			// 'ip' and 'asn' are pure qual-only input columns — they are NOT
-			// mapped to any response field, which is what allows Steampipe to
-			// pass them through to the hydrate function cleanly.
 			KeyColumns: plugin.OptionalColumns([]string{"ip", "asn"}),
 			Hydrate:    listASN,
 		},
@@ -152,14 +149,6 @@ func asnColumns() []*plugin.Column {
 			Description: "Raw WHOIS text for the ASN.",
 			Transform:   transform.FromField("asn.whois_response"),
 		},
-
-		// ── Raw JSON ─────────────────────────────────────────────────────────
-		{
-			Name:        "raw",
-			Type:        proto.ColumnType_JSON,
-			Description: "Full raw JSON response from the /v3/asn API endpoint.",
-			Transform:   transform.FromValue(),
-		},
 	}
 }
 
@@ -170,7 +159,6 @@ func asnColumns() []*plugin.Column {
 //	select * from ipgeolocation_asn where ip  = '8.8.8.8';
 //	select * from ipgeolocation_asn where asn = '15169';
 //	select * from ipgeolocation_asn where asn = 'AS15169';
-//	select * from ipgeolocation_asn;   -- returns caller's IP ASN
 func listASN(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := newClient(ctx, d)
 	if err != nil {
@@ -186,6 +174,11 @@ func listASN(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 	if q := d.EqualsQuals["asn"]; q != nil {
 		// normalise: "15169" / "AS15169" / "as15169" → "15169"
 		asnVal = normaliseASN(q.GetStringValue())
+	}
+
+	// enforce: at least one must be provided
+	if ip == "" && asnVal == "" {
+		return nil, fmt.Errorf("query must include either 'ip' or 'asn' in the WHERE clause")
 	}
 
 	data, err := client.GetASN(ctx, ip, asnVal)

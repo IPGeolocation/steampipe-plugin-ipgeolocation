@@ -10,16 +10,16 @@ import (
 // Plugin returns the plugin definition.
 func Plugin(ctx context.Context) *plugin.Plugin {
 	p := &plugin.Plugin{
-		Name: "steampipe-plugin-ipgeolocation",
+		Name: "ipgeolocation",
 		ConnectionConfigSchema: &plugin.ConnectionConfigSchema{
 			NewInstance: ConfigInstance,
 		},
-		DefaultTransform: transform.FromGo().NullIfZero(),
+		DefaultTransform: transform.FromCamel(),
 		TableMap: map[string]*plugin.Table{
-			"ipgeolocation_ip":       tableIPGeolocation(ctx),
-			"ipgeolocation_security": tableIPSecurity(ctx),
-			"ipgeolocation_abuse":    tableIPAbuse(ctx),
-			"ipgeolocation_asn":      tableASN(ctx),
+			"ipgeolocation_ip":       tableIpgeolocationIp(ctx),
+			"ipgeolocation_security": tableIpgeolocationSecurity(ctx),
+			"ipgeolocation_abuse":    tableIpgeolocationAbuse(ctx),
+			"ipgeolocation_asn":      tableIpgeolocationAsn(ctx),
 		},
 	}
 	return p
