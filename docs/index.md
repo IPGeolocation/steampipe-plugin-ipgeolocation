@@ -1,6 +1,6 @@
 ---
 organization: ipgeolocation
-category: ["saas", "internet", "security"]
+category: ["saas", "internet"]
 icon_url: "/images/plugins/ipgeolocation/ipgeolocation.svg"
 brand_color: "#6c63ff"
 display_name: "IPGeolocation.io"
