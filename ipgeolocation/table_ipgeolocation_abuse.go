@@ -12,7 +12,7 @@ func tableIpgeolocationAbuse(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name: "ipgeolocation_abuse",
 		Description: "Abuse contact lookup using the IPGeolocation.io /v3/abuse endpoint. " +
-			"Returns the responsible organisation, role, emails, phone numbers, " +
+			"Returns the responsible organization, emails, phone numbers, " +
 			"postal address, CIDR route, and registered country for any IPv4 or IPv6 address. " +
 			"Requires a paid plan. Each query costs 1 API credit.",
 		List: &plugin.ListConfig{

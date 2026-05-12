@@ -15,7 +15,6 @@ func tableIpgeolocationAsn(ctx context.Context) *plugin.Table {
 		Name: "ipgeolocation_asn",
 		Description: "ASN lookup using the IPGeolocation.io /v3/asn endpoint. " +
 			"Filter by ip (any IPv4/IPv6) or asn (e.g. '15169' or 'AS15169'). " +
-			"With no filter the caller's own public IP ASN is returned. " +
 			"Each query costs 1 API credit.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.OptionalColumns([]string{"ip", "asn"}),

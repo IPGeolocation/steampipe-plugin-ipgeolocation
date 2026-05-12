@@ -2,7 +2,7 @@
 
 ASN lookup using the [IPGeolocation.io](https://ipgeolocation.io) `/v3/asn` endpoint.
 
-Look up by IP address **or** ASN number. Returns the owning organisation, registration metadata (RIR, allocation date, status), announced route counts, and optionally the full list of routes, peers, upstreams, downstreams, and raw WHOIS text.
+Look up by IP address **or** ASN number. Returns the owning organization, registration metadata (RIR, allocation date, status), announced route counts, and optionally the full list of routes, peers, upstreams, downstreams, and raw WHOIS text.
 
 > **Note:** This endpoint requires a **paid plan** API key and costs **1 credits per request**.
 

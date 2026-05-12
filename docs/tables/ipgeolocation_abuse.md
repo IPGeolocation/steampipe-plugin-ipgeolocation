@@ -2,7 +2,7 @@
 
 Abuse contact lookup using the [IPGeolocation.io](https://ipgeolocation.io) `/v3/abuse` endpoint.
 
-Returns the responsible organisation, role, emails, phone numbers, postal address, CIDR route, and registered country for any IPv4 or IPv6 address — everything you need to file an abuse report.
+Returns the responsible organization, emails, phone numbers, postal address, CIDR route, and registered country for any IPv4 or IPv6 address — everything you need to file an abuse report.
 
 > **Note:** Requires a **paid plan** API key. Costs **1 credit** per request.
 

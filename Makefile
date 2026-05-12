@@ -1,22 +1,17 @@
-PLUGIN_NAME    = steampipe-plugin-ipgeolocation
-PLUGIN_DIR     = $(HOME)/.steampipe/plugins/local/ipgeolocation
-PLUGIN_BIN     = $(PLUGIN_DIR)/ipgeolocation.plugin
-CONFIG_DIR     = $(HOME)/.steampipe/config
-CONFIG_FILE    = $(CONFIG_DIR)/ipgeolocation.spc
+STEAMPIPE_INSTALL_DIR ?= ~/.steampipe
+BUILD_TAGS             = netgo
+PLUGIN_PATH            = hub.steampipe.io/plugins/ipgeolocation/ipgeolocation@latest
+PLUGIN_BIN             = $(STEAMPIPE_INSTALL_DIR)/plugins/$(PLUGIN_PATH)/steampipe-plugin-ipgeolocation.plugin
 
-.PHONY: all build install install-config setup fmt lint test clean
+CONFIG_DIR  = $(STEAMPIPE_INSTALL_DIR)/config
+CONFIG_FILE = $(CONFIG_DIR)/ipgeolocation.spc
 
-## Default: build the plugin binary
-all: build
+.PHONY: install install-config setup fmt lint test clean
 
-## Compile the plugin binary
-build:
-	go build -o $(PLUGIN_NAME) .
-
-## Install binary into Steampipe's local plugin path
-install: build
-	@mkdir -p $(PLUGIN_DIR)
-	@cp $(PLUGIN_NAME) $(PLUGIN_BIN)
+## Build and install the plugin binary in one step
+install:
+	@mkdir -p $(dir $(PLUGIN_BIN))
+	go build -o $(PLUGIN_BIN) -tags "${BUILD_TAGS}" *.go
 	@echo "✓ Plugin installed → $(PLUGIN_BIN)"
 
 ## Copy the sample config (skips if already exists so you don't lose edits)
@@ -35,13 +30,13 @@ install-config:
 setup:
 	@echo "→ Fetching Go dependencies..."
 	go mod tidy
-	@echo "→ Building plugin..."
+	@echo "→ Building and installing plugin..."
 	@$(MAKE) install
 	@echo "→ Installing config..."
 	@$(MAKE) install-config
 	@echo ""
 	@echo "Done! Next steps:"
-	@echo "  1. Edit ~/.steampipe/config/ipgeolocation.spc  (or set IPGEOLOCATION_API_KEY)"
+	@echo "  1. Edit $(CONFIG_FILE)  (or set IPGEOLOCATION_API_KEY)"
 	@echo "  2. steampipe service restart"
 	@echo "  3. steampipe query \"select * from ipgeolocation_ip where ip = '8.8.8.8'\""
 
@@ -57,7 +52,7 @@ lint:
 test:
 	go test ./...
 
-## Remove built binary
+## Remove built plugin binary
 clean:
-	@rm -f $(PLUGIN_NAME)
+	@rm -f $(PLUGIN_BIN)
 	@echo "✓ Cleaned"

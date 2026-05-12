@@ -1,3 +1,8 @@
+## v0.1.2 [2026-05-12]
+
+- fix abuse and asn docs description
+- fix Makefile issues that was targeting local plugins and added netgo tag for building binaries.
+
 ## v0.1.1 [2026-04-24]
 _Minor bug fixes + suggestions by Steampipe reviewer_
 
