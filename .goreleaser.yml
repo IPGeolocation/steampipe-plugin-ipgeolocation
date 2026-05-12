@@ -18,7 +18,7 @@ builds:
     id: "steampipe"
     binary: "{{ .ProjectName }}.plugin"
     flags:
-      - -tags netgo
+      - -tags=netgo
 
 archives:
   - formats:
