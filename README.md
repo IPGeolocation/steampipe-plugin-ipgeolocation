@@ -1,3 +1,5 @@
+![IPGeolocation Social Graphic Image](https://hub.steampipe.io/images/plugins/ipgeolocation/ipgeolocation-social-graphic.png)
+
 # Steampipe Plugin for IPGeolocation.io
 
 Use SQL to query IP geolocation, threat intelligence, ASN details, and abuse contacts from [IPGeolocation.io](https://ipgeolocation.io).
