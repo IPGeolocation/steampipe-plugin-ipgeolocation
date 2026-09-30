@@ -1,3 +1,8 @@
+## v0.1.4 [2026-10-01]
+
+- Updated Go dependencies to fix security vulnerabilities (gRPC, OpenTelemetry, golang.org/x/crypto, x/net, x/text, go-getter and others). No changes to tables, columns or query results.
+- Builds now require Go 1.26, and release binaries are built with the latest Go 1.26 patch release.
+
 ## v0.1.2 [2026-05-12]
 
 - fix abuse and asn docs description
