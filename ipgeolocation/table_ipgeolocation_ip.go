@@ -206,14 +206,14 @@ func ipGeolocationColumns() []*plugin.Column {
 		},
 		{
 			Name:        "timezone_offset",
-			Type:        proto.ColumnType_INT,
-			Description: "UTC offset in seconds.",
+			Type:        proto.ColumnType_DOUBLE,
+			Description: "UTC offset in hours; fractional values are possible.",
 			Transform:   transform.FromField("time_zone.offset"),
 		},
 		{
 			Name:        "timezone_offset_with_dst",
-			Type:        proto.ColumnType_INT,
-			Description: "UTC offset including DST adjustment in seconds.",
+			Type:        proto.ColumnType_DOUBLE,
+			Description: "UTC offset in hours including DST; fractional values are possible.",
 			Transform:   transform.FromField("time_zone.offset_with_dst"),
 		},
 		{

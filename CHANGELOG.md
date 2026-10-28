@@ -1,3 +1,7 @@
+## Unreleased
+
+- `ipgeolocation_ip`: `timezone_offset` and `timezone_offset_with_dst` are now `double` columns documented in hours. The API returns hours (for example `5.5`), so the previous integer columns and "seconds" descriptions dropped fractional offsets.
+
 ## v0.1.4 [2026-10-01]
 
 - Updated Go dependencies to fix security vulnerabilities (gRPC, OpenTelemetry, golang.org/x/crypto, x/net, x/text, go-getter and others). No changes to tables, columns or query results.

@@ -146,8 +146,8 @@ where
 | organization | text | ASN organization |
 | connection_type | text | Connection type |
 | timezone_name | text | IANA timezone name |
-| timezone_offset | bigint | UTC offset (seconds) |
-| timezone_offset_with_dst | bigint | UTC offset incl. DST |
+| timezone_offset | double | UTC offset in hours; fractional values are possible |
+| timezone_offset_with_dst | double | UTC offset in hours including DST; fractional values are possible |
 | timezone_current_time | text | Current local time |
 | timezone_is_dst | bool | DST active? |
 | threat_score | bigint | Threat score 0-100 (paid) |
