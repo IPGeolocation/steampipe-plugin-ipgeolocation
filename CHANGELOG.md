@@ -1,5 +1,6 @@
 ## v0.1.5 [2026-10-29]
 
+- Updated Go networking dependencies and the release toolchain. Transport errors retain their underlying cause without including API keys in request URLs.
 - `ipgeolocation_ip`: `timezone_offset` and `timezone_offset_with_dst` are now `double` columns documented in hours. The API returns hours (for example `5.5`), so the previous integer columns and "seconds" descriptions dropped fractional offsets.
 
 ## v0.1.4 [2026-10-01]

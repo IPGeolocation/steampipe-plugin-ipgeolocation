@@ -1,0 +1,10 @@
+id: 5363c5ee-33a1-46ef-a8c1-cd5dc633171e
+simulation: steampipe
+routing: path
+mocks:
+  - name: ipgeolocation
+    id: 4cfe8d84-e688-4f4e-955f-de1856c44d25
+    routeKey: ipgeolocation
+    origin:
+      - api.ipgeolocation.io
+    path: ../../mocks/ipgeolocation/config.yaml
