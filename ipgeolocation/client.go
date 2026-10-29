@@ -3,6 +3,7 @@ package ipgeolocation
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -102,6 +103,10 @@ func (c *Client) doGet(ctx context.Context, endpoint string) (map[string]interfa
 	}
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
+		var requestError *url.Error
+		if errors.As(err, &requestError) {
+			err = requestError.Err // The outer error includes the API key in its request URL.
+		}
 		return nil, fmt.Errorf("executing request: %w", err)
 	}
 	defer resp.Body.Close()

@@ -17,6 +17,12 @@ builds:
       - arm64
     id: "steampipe"
     binary: "{{ .ProjectName }}.plugin"
+    ldflags:
+      - -w
+    hooks:
+      post:
+        - cmd: govulncheck -mode=binary "{{ .Path }}"
+          output: true
     flags:
       - -tags=netgo
 

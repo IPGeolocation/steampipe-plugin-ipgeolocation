@@ -6,7 +6,7 @@ PLUGIN_BIN             = $(STEAMPIPE_INSTALL_DIR)/plugins/$(PLUGIN_PATH)/steampi
 CONFIG_DIR  = $(STEAMPIPE_INSTALL_DIR)/config
 CONFIG_FILE = $(CONFIG_DIR)/ipgeolocation.spc
 
-.PHONY: install install-config setup fmt lint test clean
+.PHONY: install install-config setup fmt lint test test-http clean
 
 ## Build and install the plugin binary in one step
 install:
@@ -51,6 +51,10 @@ lint:
 ## Run tests
 test:
 	go test ./...
+
+## Check HTTPS requests against the local Postman simulation
+test-http:
+	node scripts/test-http.cjs
 
 ## Remove built plugin binary
 clean:

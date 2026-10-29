@@ -1,0 +1,37 @@
+purpose:
+  stands_in_for: IPGeolocation v3 IP, security, abuse and ASN GET responses.
+  unblocks: HTTP and table-hydration regression checks for the plugin dependency update.
+assumptions:
+  - id: request-and-row-compatibility
+    status: supported
+    claim: The plugin preserves its request parameters, nested result fields, IPv6 values and fractional timezone offsets in the modeled cases.
+    reason: These are the existing client and table contracts under test.
+    verification: On 2026-10-29, all 13 HTTPS cases passed. Proxy traffic confirms the real client reached the stand-in for all four endpoints; the timeout check observed the expected caller error. No live service behavior is established.
+    source: ipgeolocation/http_integration_test.go; postman/mocks/ipgeolocation/default.js
+    updated_at: '2026-10-29'
+  - id: error-compatibility
+    status: supported
+    claim: HTTP 401, 403, 429 and 503 responses, malformed JSON and timeouts still return errors without result rows.
+    reason: The dependency update must preserve these caller outcomes.
+    verification: On 2026-10-29, all 13 HTTPS cases passed. Proxy traffic confirms the real client reached the stand-in for all four endpoints; the timeout check observed the expected caller error. No live service behavior is established.
+    source: ipgeolocation/http_integration_test.go
+    updated_at: '2026-10-29'
+  - id: live-provider-contract
+    status: unknown
+    claim: These fixture checks establish live provider behavior or account permissions.
+    reason: Fixtures model the existing plugin and documented table fields. No provider mock was listed in the official IPGeolocation.io API Hub workspace; Orbit discovery returned HTTP 403.
+    verification: No live provider requests or credentials are used. The simulation checks the real client against controlled responses.
+    source: ipgeolocation/client.go; docs/tables; postman/mocks/ipgeolocation/default.js
+    updated_at: '2026-10-29'
+  - id: proxy-certificate-serials
+    status: supported
+    claim: Postman CLI 1.73.0 can issue a negative-serial test certificate that strict Go rejects before an API request reaches the mock.
+    reason: Go 1.26.10 rejected the local proxy certificate with x509 negative serial number errors. The HTTPS-only test subprocess enables the Go compatibility flag for these fixture certificates; the production plugin and normal TLS tests keep their defaults.
+    verification: The initial Go 1.26.10 proxy run failed at the TLS handshake. The Go 1.26.10 rerun passed all 13 HTTPS cases with the fixture-only compatibility flag; normal tests separately passed trusted and untrusted TLS checks without that flag.
+    source: scripts/test-http.cjs; ipgeolocation/client_test.go; ipgeolocation/http_integration_test.go
+    updated_at: '2026-10-29'
+fingerprints:
+  - id: security-update-v0.1.5
+    date: '2026-10-29'
+    commit: 4ab6ad1c plus dependency, error-redaction and regression-test changes in the working tree.
+    cli: Postman CLI 1.73.0; Go 1.26.10 and 1.27.3.
