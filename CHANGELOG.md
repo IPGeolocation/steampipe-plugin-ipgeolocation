@@ -1,4 +1,4 @@
-## Unreleased
+## v0.1.5 [2026-10-29]
 
 - `ipgeolocation_ip`: `timezone_offset` and `timezone_offset_with_dst` are now `double` columns documented in hours. The API returns hours (for example `5.5`), so the previous integer columns and "seconds" descriptions dropped fractional offsets.
 
