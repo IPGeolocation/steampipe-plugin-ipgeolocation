@@ -93,7 +93,7 @@ select
 from
   ipgeolocation_ip
 where
-  ip = '203.0.113.1';
+  ip = '8.8.8.8';
 ```
 
 ### Get company and abuse contact data (paid plan)
