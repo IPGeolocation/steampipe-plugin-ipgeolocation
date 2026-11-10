@@ -1,3 +1,7 @@
+## v0.1.6
+
+- Update the compression library to 1.20.4 and go-jose to 4.1.9. The tables and SQL queries work the same way.
+
 ## v0.1.5 [2026-10-29]
 
 - Updated Go networking dependencies and the release toolchain. Transport errors retain their underlying cause without including API keys in request URLs.
