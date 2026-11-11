@@ -1,4 +1,4 @@
-## v0.1.6
+## v0.1.6 [2026-11-11]
 
 - Update the compression library to 1.20.4 and go-jose to 4.1.9. The tables and SQL queries work the same way.
 
