@@ -16,6 +16,11 @@
 - Updated Go dependencies to fix security vulnerabilities (gRPC, OpenTelemetry, golang.org/x/crypto, x/net, x/text, go-getter and others). No changes to tables, columns or query results.
 - Builds now require Go 1.26, and release binaries are built with the latest Go 1.26 patch release.
 
+## v0.1.3 [2026-06-15]
+
+- Added the Steampipe Hub social graphic to the README.
+- Changed the Hub display name to "IPGeolocation", because Hub names can't contain dots. No changes to tables, columns or query results.
+
 ## v0.1.2 [2026-05-12]
 
 - fix abuse and asn docs description
