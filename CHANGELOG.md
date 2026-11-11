@@ -1,4 +1,8 @@
-## v0.1.6
+## v0.1.7 [2026-11-11]
+
+- Release binaries are built with Go 1.26.11, which fixes GO-2026-6859 (an HTTP/1 server crash in `net/http`). Building from source needs Go 1.26.11 or later. The tables and SQL queries work the same way.
+
+## v0.1.6 [2026-11-11]
 
 - Update the compression library to 1.20.4 and go-jose to 4.1.9. The tables and SQL queries work the same way.
 
